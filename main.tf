@@ -1,9 +1,3 @@
-provider "aws" {
-  region     = "${var.region}"
-  access_key = "${var.aws_access_key}"
-  secret_key = "${var.aws_secret_key}"
-}
-
 data "aws_ami" "centos7"{
   most_recent = true
 
