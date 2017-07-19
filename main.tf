@@ -19,16 +19,23 @@ data "aws_ami" "centos7"{
 }
 
 data "template_file" "userdata" {
-  template = "${file("${var.path_to_file}")}"
+  template = "${file("${path.module}/${var.path_to_file}")}"
+
+  vars {
+    dns_name    = "${var.puppetmaster_dns}"
+    environment = "${var.environment}"
+    puppet_ip   = "${var.puppet_ip}"
+  }
 }
 
-resource "aws_instance" "puppetagent" {
+resource "aws_instance" "zookeeper" {
   count                       = 1
   key_name                    = "${var.key_name}"
   ami                         = "${data.aws_ami.centos7.id}"
   instance_type               = "${var.instype}"
   user_data                   = "${data.template_file.userdata.rendered}"
-  #subnet_id                   = "${element(var.subnet_id, count.index)}"
+  subnet_id                   = "${element(var.subnet_id, count.index)}"
+  security_groups             = ["${var.sec_group}"]
 
   tags {
     Name = "Zookeeper Instance"
