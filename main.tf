@@ -23,7 +23,7 @@ data "template_file" "userdata" {
 }
 
 resource "aws_instance" "zookeeper" {
-  count                       = 1
+  count                       = 3
   key_name                    = "${var.key_name}"
   ami                         = "${data.aws_ami.centos7.id}"
   instance_type               = "${var.instype}"
@@ -32,6 +32,6 @@ resource "aws_instance" "zookeeper" {
   security_groups             = ["${var.sec_group}"]
 
   tags {
-    Name = "Zookeeper Instance"
+    Name = "${count.index}.Zookeeper Instance"
   }
 }
