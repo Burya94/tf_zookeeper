@@ -3,6 +3,7 @@ timedatectl set-timezone Europe/Kiev
 rpm -Uvh https://yum.puppetlabs.com/puppetlabs-release-pc1-el-7.noarch.rpm
 yum update
 yum -y install puppet-agent
+yum install java-1.8.0-openjdk -y
 cat >> /etc/puppetlabs/puppet/puppet.conf << EOF
 [main]
 server = ${dns_name}
