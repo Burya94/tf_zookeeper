@@ -25,6 +25,6 @@ end
 EOF
 cat >> /root/.bash_profile << EOF
 export FACTERLIB=/root/
-export JAVA_HOME=/opt/jdk1.8.0_141
-export PATH=$PATH:$JAVA_HOME/bin
+export JAVA_HOME=/opt/jdk1.8.0_141/
+export PATH=$PATH:${JAVA_HOME}bin/
 EOF
