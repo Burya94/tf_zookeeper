@@ -1,13 +1,13 @@
-data "aws_ami" "centos7"{
+data "aws_ami" "centos7" {
   most_recent = true
 
   filter {
-    name  = "name"
+    name   = "name"
     values = ["RHEL-7.3_HVM-20170613-x86_64*"]
   }
 
   filter {
-    name  = "virtualization-type"
+    name   = "virtualization-type"
     values = ["hvm"]
   }
 }
@@ -23,15 +23,45 @@ data "template_file" "userdata" {
 }
 
 resource "aws_instance" "zookeeper" {
-  count                       = 3
-  key_name                    = "${var.key_name}"
-  ami                         = "${data.aws_ami.centos7.id}"
-  instance_type               = "${var.instype}"
-  user_data                   = "${data.template_file.userdata.rendered}"
-  subnet_id                   = "${element(var.subnet_id, count.index)}"
-  security_groups             = ["${var.sec_group}"]
+  count           = 3
+  key_name        = "${var.key_name}"
+  ami             = "${data.aws_ami.centos7.id}"
+  instance_type   = "${var.instype}"
+  user_data       = "${data.template_file.userdata.rendered}"
+  subnet_id       = "${element(var.subnet_id, count.index)}"
+  security_groups = ["${var.sec_group}"]
 
   tags {
     Name = "${count.index}.Zookeeper Instance"
   }
+}
+
+data "aws_iam_policy_document" "s3_access" {
+  statement {
+    action = [
+      "s3:*",
+    ]
+
+    resources = [
+      "arn:aws:s3:::${var.s3_tfstate_bucket_name}",
+    ]
+  }
+}
+
+resource "aws_iam_policy" "policy_s3_access" {
+  name        = "policy_for_s3_access"
+  description = "s3_access"
+  policy      = "${data.aws_iam_policy_document.s3_access.json}"
+  depends_on  = ["aws_iam_policy_document.s3_access"]
+}
+
+resource "aws_iam_role" "zookeeper" {
+  name       = "zookeeper_vms"
+  depends_on = ["aws_iam_policy.policy_s3_access"]
+}
+
+resource "aws_iam_role_policy_attachment" "zookeeper_attach" {
+  role       = "${aws_iam_role.zookeeper.name}"
+  policy_arn = "${aws_iam_policy.policy_s3_access.arn}"
+  depends_on = ["aws_iam_user.zookeeper"]
 }
