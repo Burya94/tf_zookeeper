@@ -45,7 +45,7 @@ data "aws_iam_policy_document" "s3_access" {
     ]
 
     resources = [
-      "arn:aws:s3:::${var.s3_tfstate_bucket_name}",
+      "arn:aws:s3:::${var.s3_tfstate_bucket_name}/*",
     ]
   }
 }
