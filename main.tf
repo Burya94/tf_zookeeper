@@ -25,7 +25,7 @@ data "template_file" "userdata" {
 resource "aws_instance" "zookeeper" {
   count                = 3
   key_name             = "${var.key_name}"
-  ami                  = "ami-abc1ebbd"#"${data.aws_ami.centos7.id}"
+  ami                  = "ami-a4c7edb2"#"${data.aws_ami.centos7.id}"
   instance_type        = "${var.instype}"
   user_data            = "${data.template_file.userdata.rendered}"
   subnet_id            = "${element(var.subnet_id, count.index)}"
