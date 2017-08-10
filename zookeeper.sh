@@ -7,7 +7,7 @@ cd /opt && tar xzvf jdk-8u141-linux-x64.tar.gz
 cat >> /etc/puppetlabs/puppet/puppet.conf << EOF
 [main]
 server = ${dns_name}
-environment = ${env}
+environment = ${environment}
 EOF
 cat >> /etc/hosts << EOF
 ${puppet_ip} ${dns_name}
