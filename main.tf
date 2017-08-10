@@ -64,11 +64,11 @@ resource "aws_iam_role" "zookeeper" {
 resource "aws_iam_role_policy_attachment" "zookeeper_attach" {
   role       = "${aws_iam_role.zookeeper.name}"
   policy_arn = "${aws_iam_policy.policy_s3_access.arn}"
-  depends_on = ["aws_iam_user.zookeeper"]
+  depends_on = ["aws_iam_role.zookeeper"]
 }
 
 resource "aws_iam_instance_profile" "zoo_profile" {
   name       = "zookeeper_profile"
   role       = "${aws_iam_role.zookeeper.name}"
-  depends_on = ["aws_iam_role_policy_attachment"]
+  depends_on = ["aws_iam_role_policy_attachment.zookeeper_attach"]
 }
