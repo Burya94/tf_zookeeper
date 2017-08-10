@@ -40,7 +40,7 @@ resource "aws_instance" "zookeeper" {
 
 data "aws_iam_policy_document" "s3_access" {
   statement {
-    action = [
+    actions = [
       "s3:*",
     ]
 
@@ -57,7 +57,24 @@ resource "aws_iam_policy" "policy_s3_access" {
 }
 
 resource "aws_iam_role" "zookeeper" {
-  name       = "zookeeper_vms"
+  name = "zookeeper_vms"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+
   depends_on = ["aws_iam_policy.policy_s3_access"]
 }
 
