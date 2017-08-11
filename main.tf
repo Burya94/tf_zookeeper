@@ -49,6 +49,16 @@ data "aws_iam_policy_document" "s3_access" {
       "arn:aws:s3:::${var.s3_tfstate_bucket_name}"
     ]
   }
+
+  statement {
+      actions =[
+          "sts:AssumeRole",
+      ]
+
+      resources =[
+          "arn:aws:iam::${var.account_id}:role/${var.role_name}",
+      ]
+  }
 }
 
 resource "aws_iam_policy" "policy_s3_access" {
