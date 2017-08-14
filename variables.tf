@@ -17,5 +17,5 @@ variable "environment" {}
 variable "puppet_ip" {}
 variable "sec_group" {}
 variable "s3_tfstate_bucket_name" {}
-variable "role_name" {}
+variable "stream_name" {}
 variable "account_id" {}

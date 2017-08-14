@@ -52,11 +52,11 @@ data "aws_iam_policy_document" "s3_access" {
 
   statement {
       actions =[
-          "sts:AssumeRole",
+          "kinesis:*",
       ]
 
       resources =[
-          "arn:aws:iam::${var.account_id}:role/${var.role_name}",
+          "arn:aws:kinesis:*:${var.account_id}:stream/${stream_name}",
       ]
   }
 }
