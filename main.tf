@@ -25,7 +25,7 @@ data "template_file" "userdata" {
 resource "aws_autoscaling_group" "testscale" {
   availability_zones        = ["us-east-1a"]
   name                      = "terraasg_test"
-  launch_configuration      = "${aws_launch_configuration.zookeeper}"
+  launch_configuration      = "${aws_launch_configuration.zookeeper.id}"
   health_check_grace_period = 300
   health_check_type         = "EC2"
   min_size                  = 3
@@ -41,7 +41,7 @@ resource "aws_autoscaling_group" "testscale" {
 resource "aws_launch_configuration" "zookeeper" {
   #count                = 3
   key_name      = "${var.key_name}"
-  ami           = "ami-a4c7edb2"                            #"${data.aws_ami.centos7.id}"
+  image_id           = "ami-a4c7edb2"                            #"${data.aws_ami.centos7.id}"
   instance_type = "${var.instype}"
   user_data     = "${data.template_file.userdata.rendered}"
 
